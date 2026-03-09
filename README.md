@@ -4,7 +4,8 @@ Project Structure
 
      spam-detection-nlp
     │
-    ├── data     │   └── spam.csv
+    ├── data     
+    │   └── spam.csv
     │
     ├── src
     │   ├── train_model.py
