@@ -8,7 +8,7 @@ Project Structure
     │   └── spam.csv
     │
     ├── src
-    │   ├── train_model.py  //Raghuraj-stack doing this
+    │   ├── train_model.py
     │   ├── predict.py
     │   └── visualization.py
     │
