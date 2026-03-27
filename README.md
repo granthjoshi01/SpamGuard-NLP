@@ -8,11 +8,16 @@ Project Structure
     │   └── spam.csv
     │
     ├── src
-    │   ├── train_model.py
+    │   ├── model.py
     │   ├── predict.py
-    │   └── visualization.py
+    │   └── data_loader.py
+    |   ├── evaluate.py
+    │   ├── logger.py
+    │   └── preprocessing.py
+    │   ├── utilis.py
+    │   └── vectorizer.py
     │
-    ├── app.py
+    ├── main.py
     ├── requirements.txt
     ├── README.md
     └── Dockerfile
