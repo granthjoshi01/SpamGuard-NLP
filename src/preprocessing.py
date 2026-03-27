@@ -1,17 +1,26 @@
 import re
-import nltk
-
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 
-nltk.download('stopwords')
-
-ps = PorterStemmer()
+# Initialize once
 stop_words = set(stopwords.words('english'))
+stemmer = PorterStemmer()
 
-def clean_text(text):
-    text = str(text).lower()
-    text = re.sub(r'[^a-zA-Z]', ' ', text)
+def preprocess_text(text):
+    """
+    Preprocesses a given text by:
+    - Lowercasing
+    - Removing special characters (keeping numbers)
+    - Removing stopwords
+    - Applying stemming
+    """
+    if not isinstance(text, str):
+        return ""
+        
+    text = text.lower()
+    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
+    
     words = text.split()
-    words = [ps.stem(word) for word in words if word not in stop_words]
-    return " ".join(words)
+    words = [stemmer.stem(word) for word in words if word not in stop_words]
+    
+    return ' '.join(words)
