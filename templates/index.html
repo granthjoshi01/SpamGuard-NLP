@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SpamGuard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="page-shell">
+      <section class="hero-card">
+        <div class="hero-copy">
+          <p class="eyebrow">Multilingual SMS Shield</p>
+          <h1>SpamGuard</h1>
+          <p class="intro">
+            Check suspicious SMS content in seconds. Select the message
+            language, paste the SMS manually, and let SpamGuard estimate whether
+            it is spam or ham using an NLP pipeline.
+          </p>
+          <ul class="highlights">
+            <li>Flags risky SMS patterns before you click or reply</li>
+            <li>Supports 5 launch languages</li>
+            <li>Shows confidence and quick safety advice</li>
+          </ul>
+        </div>
+
+        <form id="spam-form" class="checker-panel">
+          <label class="field">
+            <span>SMS Language</span>
+            <div class="custom-select" id="language-select">
+              <input id="language" name="language" type="hidden" required />
+              <button
+                type="button"
+                class="select-trigger"
+                id="language-trigger"
+                aria-haspopup="listbox"
+                aria-expanded="false"
+              >
+                <span id="language-trigger-label">Choose a language</span>
+                <span class="select-icon" aria-hidden="true"></span>
+              </button>
+              <div class="select-menu hidden" id="language-menu" role="listbox">
+                {% for language in languages %}
+                <button
+                  type="button"
+                  class="select-option"
+                  role="option"
+                  data-value="{{ language.code }}"
+                  data-label="{{ language.label }}"
+                  aria-selected="false"
+                >
+                  <span class="option-title">{{ language.label }}</span>
+                  <span class="option-meta">{{ language.code|upper }}</span>
+                </button>
+                {% endfor %}
+              </div>
+            </div>
+          </label>
+
+          <label class="field">
+            <span>SMS Message</span>
+            <textarea
+              id="message"
+              name="message"
+              rows="7"
+              placeholder="Example: Congratulations! You have won a free gift card. Click the link now to claim your prize."
+              required
+            ></textarea>
+          </label>
+
+          <button type="submit" id="submit-button">Check Message</button>
+          <p class="helper-text" id="form-status">
+            Enter a message and choose the original SMS language.
+          </p>
+        </form>
+      </section>
+    </div>
+
+    <div class="modal hidden" id="result-modal" aria-hidden="true">
+      <div class="modal-backdrop" data-close="true"></div>
+      <div
+        class="modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="result-title"
+      >
+        <button class="modal-close" id="close-modal" aria-label="Close result">
+          &times;
+        </button>
+        <p class="modal-tag">Detection Result</p>
+        <h2 id="result-title">SpamGuard Verdict</h2>
+        <div class="result-pill" id="result-pill"></div>
+        <dl class="result-grid">
+          <div>
+            <dt>Confidence</dt>
+            <dd id="result-confidence">-</dd>
+          </div>
+          <div>
+            <dt>Selected Language</dt>
+            <dd id="result-language">-</dd>
+          </div>
+        </dl>
+        <div class="result-panel">
+          <h3>Safety Tip</h3>
+          <p id="result-tips"></p>
+        </div>
+        <div class="result-panel">
+          <h3>Translated To English</h3>
+          <p id="result-translation"></p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.spamGuardLanguages = {{ languages | tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>

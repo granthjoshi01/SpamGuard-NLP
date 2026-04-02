@@ -1,26 +1,33 @@
 import re
+
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 
-# Initialize once
-stop_words = set(stopwords.words('english'))
+
 stemmer = PorterStemmer()
 
+
+def _load_stop_words():
+    try:
+        return set(stopwords.words("english"))
+    except LookupError:
+        return set()
+
+
+STOP_WORDS = _load_stop_words()
+
+
 def preprocess_text(text):
-    """
-    Preprocesses a given text by:
-    - Lowercasing
-    - Removing special characters (keeping numbers)
-    - Removing stopwords
-    - Applying stemming
-    """
     if not isinstance(text, str):
         return ""
-        
-    text = text.lower()
-    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
-    
-    words = text.split()
-    words = [stemmer.stem(word) for word in words if word not in stop_words]
-    
-    return ' '.join(words)
+
+    normalized = text.lower().strip()
+    normalized = re.sub(r"[^a-z0-9\s]", " ", normalized)
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+
+    words = [
+        stemmer.stem(word)
+        for word in normalized.split()
+        if word and word not in STOP_WORDS
+    ]
+    return " ".join(words)
