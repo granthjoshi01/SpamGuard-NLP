@@ -1,32 +1,25 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
+from pathlib import Path
 import pickle
 
-def train_vectorizer(texts, save_path="vectorizer.pkl"):
-    """
-    Trains a TF-IDF vectorizer and saves it to a file.
+from sklearn.feature_extraction.text import TfidfVectorizer
 
-    Parameters:
-        texts (list): List of preprocessed text messages.
-        save_path (str): Path to save the vectorizer.
 
-    Returns:
-        TfidfVectorizer: Trained vectorizer.
-    """
+DEFAULT_VECTORIZER_PATH = Path("artifacts/vectorizer.pkl")
+
+
+def train_vectorizer(texts, save_path=DEFAULT_VECTORIZER_PATH):
     vectorizer = TfidfVectorizer(ngram_range=(1, 2))
     vectorizer.fit(texts)
-    with open(save_path, "wb") as f:
-        pickle.dump(vectorizer, f)
+
+    if save_path is not None:
+        save_path = Path(save_path)
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+        with save_path.open("wb") as file_obj:
+            pickle.dump(vectorizer, file_obj)
+
     return vectorizer
 
-def load_vectorizer(path="vectorizer.pkl"):
-    """
-    Loads a saved TF-IDF vectorizer.
 
-    Parameters:
-        path (str): Path to the saved vectorizer.
-
-    Returns:
-        TfidfVectorizer: Loaded vectorizer.
-    """
-    with open(path, "rb") as f:
-        return pickle.load(f)
+def load_vectorizer(path=DEFAULT_VECTORIZER_PATH):
+    with Path(path).open("rb") as file_obj:
+        return pickle.load(file_obj)

@@ -1,33 +1,25 @@
-from sklearn.naive_bayes import MultinomialNB
+from pathlib import Path
 import pickle
 
-def train_model(X_train, y_train, save_path="model.pkl"):
-    """
-    Trains a Multinomial Naive Bayes model and saves it to a file.
+from sklearn.naive_bayes import MultinomialNB
 
-    Parameters:
-        X_train (array): Training feature matrix.
-        y_train (array): Training labels.
-        save_path (str): Path to save the model.
 
-    Returns:
-        MultinomialNB: Trained model.
-    """
+DEFAULT_MODEL_PATH = Path("artifacts/model.pkl")
+
+
+def train_model(x_train, y_train, save_path=DEFAULT_MODEL_PATH):
     model = MultinomialNB()
-    model.fit(X_train, y_train)
-    with open(save_path, "wb") as f:
-        pickle.dump(model, f)
+    model.fit(x_train, y_train)
+
+    if save_path is not None:
+        save_path = Path(save_path)
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+        with save_path.open("wb") as file_obj:
+            pickle.dump(model, file_obj)
+
     return model
 
-def load_model(path="model.pkl"):
-    """
-    Loads a saved Multinomial Naive Bayes model.
 
-    Parameters:
-        path (str): Path to the saved model.
-
-    Returns:
-        MultinomialNB: Loaded model.
-    """
-    with open(path, "rb") as f:
-        return pickle.load(f)
+def load_model(path=DEFAULT_MODEL_PATH):
+    with Path(path).open("rb") as file_obj:
+        return pickle.load(file_obj)
