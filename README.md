@@ -41,6 +41,10 @@ SpamGuard-NLP is an **end-to-end machine learning application with a Flask-based
 
 User Input → Translation → Preprocessing → Vectorization → Model → Prediction → API Response
 
+# Pipeline Flow Diagram
+
+![pipeline](assets/pipeline.png)
+
 ---
 
 #  Features
@@ -148,6 +152,7 @@ Logs are stored in:
 
     logs/app.log
 
+![logs](assets/logs.png)
 
 # Run locally
 
