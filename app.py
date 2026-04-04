@@ -2,11 +2,13 @@ from flask import Flask, jsonify, render_template, request
 
 from src.config import SUPPORTED_LANGUAGES
 from src.prediction_service import PredictionError, PredictionService
+from src.logging import setup_logger
 
 
 def create_app() -> Flask:
     app = Flask(__name__)
     service = PredictionService()
+    logger = setup_logger()
 
     @app.get("/")
     def index():
@@ -17,11 +19,19 @@ def create_app() -> Flask:
         payload = request.get_json(silent=True) or {}
         message = payload.get("message", "")
         language = payload.get("language", "")
+        logger.info(f"Incoming request | message='{message}' | language='{language}'")
 
         try:
             result = service.predict_message(message=message, language=language)
+            logger.info(
+                f"Prediction | label={result.label} | confidence={result.confidence:.4f}"
+            )
         except PredictionError as exc:
+            logger.error(f"PredictionError: {str(exc)}")
             return jsonify({"ok": False, "error": str(exc)}), exc.status_code
+        except Exception as exc:
+            logger.exception(f"Unhandled error: {str(exc)}")
+            return jsonify({"ok": False, "error": "Internal server error"}), 500
 
         return jsonify(
             {
