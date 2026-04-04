@@ -2,7 +2,7 @@
 
 > A multilingual SMS spam detection system using NLP and machine learning with real-time API inference.
 
-## 🚀 Demo
+
 
 ![Demo](assets/output.gif)
 ---
