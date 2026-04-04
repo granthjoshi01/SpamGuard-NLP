@@ -9,6 +9,10 @@
 
 #  Problem Statement
 
+---
+
+#  Problem Statement
+
 In today’s digital communication landscape, SMS and messaging platforms are increasingly targeted by spam, phishing attempts, and fraudulent content. Traditional spam detection systems are often limited to **English-only datasets** and struggle to handle **multilingual and code-mixed messages**, which are common in real-world scenarios—especially in regions like India.
 
 Spam messages not only clutter user inboxes but also pose serious risks such as:
