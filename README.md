@@ -7,7 +7,7 @@
 ![Demo](assets/output.gif)
 ---
 
-#  Problem Statement
+
 
 ---
 
@@ -41,9 +41,7 @@ SpamGuard-NLP is an **end-to-end machine learning application with a Flask-based
 
 ---
 
-#  System Architecture
 
-User Input → Translation → Preprocessing → Vectorization → Model → Prediction → API Response
 
 # Pipeline Flow Diagram
 
@@ -84,24 +82,50 @@ User Input → Translation → Preprocessing → Vectorization → Model → Pre
 
 #  Project Structure
 
-     SpamGuard-NLP/
-    │
-    ├── src/
-    │   ├── preprocessing.py
-    │   ├── model.py
-    │   ├── vectorizer.py
-    │   ├── prediction_service.py
-    │   ├── logging.py
-    │
-    ├── app.py              # Flask API
-    ├── main.py             # Training pipeline
-    ├── data/               # Dataset
-    ├── artifacts/          # Saved model
-    ├── logs/               # Logs (ignored in git)
-    ├── templates/          # Frontend
-    ├── static/             # CSS/JS
-    └── README.md
 
+```
+SpamGuard-NLP/
+│
+├── assets/
+│   ├── logs.png
+│   ├── output.gif
+│   ├── pipeline.png
+│
+├── src/
+│   ├── __init__.py
+│   ├── config.py
+│   ├── data_loader.py
+│   ├── evaluate.py
+│   ├── logging.py
+│   ├── model.py
+│   ├── prediction_service.py
+│   ├── preprocessing.py
+│   ├── training.py
+│   ├── translation.py
+│   ├── utils.py
+│   ├── vectorizer.py
+│
+├── tests/
+│   └── test_prediction_service.py
+│
+├── static/
+│   ├── app.js
+│   └── style.css
+│
+├── templates/
+│   └── index.html
+│
+├── artifacts/          # Saved model (generated)
+├── data/               # Dataset (if included)
+├── logs/               # Logs (ignored in git)
+│
+├── app.py              # Flask API
+├── main.py             # Training pipeline
+├── requirements.txt
+├── .gitignore
+├── LICENSE
+└── README.md
+```
 ---
 
 #  How It Works
