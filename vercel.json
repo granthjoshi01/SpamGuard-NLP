@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
-    "api/app.py": {
+    "app.py": {
       "maxDuration": 30,
       "includeFiles": "{data/**,templates/**,src/**,public/**}"
     }
@@ -9,7 +9,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "api/app.py"
+      "dest": "/api/app.py"
     }
   ]
 }
