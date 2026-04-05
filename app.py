@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, send_from_directory
 
 from src.config import SUPPORTED_LANGUAGES
 from src.prediction_service import PredictionError, PredictionService
@@ -11,6 +11,14 @@ def create_app() -> Flask:
     @app.get("/")
     def index():
         return render_template("index.html", languages=SUPPORTED_LANGUAGES)
+
+    @app.get("/style.css")
+    def style():
+        return send_from_directory("public", "style.css")
+
+    @app.get("/app.js")
+    def script():
+        return send_from_directory("public", "app.js")
 
     @app.post("/predict")
     def predict():
