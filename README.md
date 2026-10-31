@@ -6,12 +6,6 @@
 
 ---
 
-**Live Demo**: [https://spam-guard-nlp.vercel.app](https://spam-guard-nlp.vercel.app)  
-**Dashboard Route**: `/dashboard`  
-**API Endpoint**: `POST /predict`
-
----
-
 ## 📋 Problem Statement
 
 In today’s digital communication ecosystem, SMS and messaging services are aggressively targeted by spam, malicious phishing links, and financial scams. Traditional spam detection approaches frequently rely on **monolingual English corpora** and struggle with:
