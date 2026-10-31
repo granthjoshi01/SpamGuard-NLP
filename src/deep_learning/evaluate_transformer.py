@@ -9,6 +9,7 @@ Running this script produces:
 import json
 import time
 from pathlib import Path
+from sklearn.model_selection import train_test_split
 
 import matplotlib
 matplotlib.use("Agg")  # Non-interactive backend
@@ -77,8 +78,12 @@ def _plot_confusion_matrix(cm, title: str, save_path: Path):
 def evaluate(data_path: str = "data/spam.csv"):
     LOGGER.info("Loading dataset for evaluation")
     df = _load_dataset(data_path)
-    X_test = df["message"].tolist()
-    y_test = df["label"].tolist()
+    _, X_test, _, y_test = train_test_split(
+        df["message"], df["label"],
+        test_size=0.2, random_state=42,
+    )
+    X_test, y_test = X_test.tolist(), y_test.tolist()
+    LOGGER.info(f"Evaluating on held-out test set: {len(X_test)} messages")
 
     # ---------------------------------------------------------------
     # Naive Bayes path
@@ -117,21 +122,10 @@ def evaluate(data_path: str = "data/spam.csv"):
         for txt in sample:
             transformer.predict(txt)
         tb_latency_ms = round(((time.time() - start) * 1000) / len(sample), 2)
-        distilbert_size = sum(p.stat().st_size for p in transformer_dir.rglob("*") if p.is_file())
+        weights_file = transformer_dir / "model.safetensors"
+        distilbert_size = weights_file.stat().st_size
     else:
-        LOGGER.info("DistilBERT weights not found; computing benchmarks using fine-tuned validation profile.")
-        # Representative performance numbers from DistilBERT fine-tuning on SMS spam benchmark
-        tb_pred = y_test.copy()  # DistilBERT correctly identifies nuances with high accuracy
-        tb_conf = [0.985] * len(y_test)
-        tb_metrics = {
-            "accuracy": 0.9850,
-            "precision": 0.9800,
-            "recall": 0.9900,
-            "f1": 0.9850,
-            "avg_confidence": 0.9850,
-        }
-        tb_latency_ms = 28.4
-        distilbert_size = 267850000  # ~268 MB DistilBERT weights
+        raise FileNotFoundError("DistilBERT weights not found. Train the model first.")
 
     # Measure Naive Bayes latency
     start = time.time()

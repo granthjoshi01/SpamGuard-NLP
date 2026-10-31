@@ -69,8 +69,7 @@ def main():
         df["message"].tolist(),
         df["label"].tolist(),
         test_size=0.2,
-        random_state=seed,
-        stratify=df["label"],
+        random_state=42
     )
 
     tokenizer = DistilBertTokenizerFast.from_pretrained("distilbert-base-uncased")
