@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SpamGuard - Model Comparison Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/style.css" />
 </head>
+
 <body>
   <!-- Top Navigation Header -->
   <header class="site-header">
@@ -34,7 +33,8 @@
       <div class="hero-content">
         <h1>Model Benchmark & Comparison</h1>
         <p class="intro">
-          Rigorous side-by-side evaluation comparing our <strong>TF-IDF + Multinomial Naive Bayes</strong> baseline against the fine-tuned <strong>DistilBERT Deep Learning Transformer</strong>.
+          Rigorous side-by-side evaluation comparing our <strong>TF-IDF + Multinomial Naive Bayes</strong> baseline
+          against the fine-tuned <strong>DistilBERT Deep Learning Transformer</strong>.
         </p>
       </div>
     </section>
@@ -230,16 +230,9 @@
             <span class="matrix-tag">TF-IDF Vectorizer</span>
           </div>
           <div class="matrix-img-wrapper">
-            <img
-              src="/artifacts/nb_confusion.png"
-              alt="Naive Bayes Confusion Matrix"
-              class="matrix-img"
-              onerror="this.parentElement.innerHTML='<div class=\'placeholder-box\'>Confusion matrix not yet generated.<br>Run: python -m src.deep_learning.evaluate_transformer</div>';"
-            />
+            <img src="/artifacts/nb_confusion.png" alt="Naive Bayes Confusion Matrix" class="matrix-img"
+              onerror="this.parentElement.innerHTML='<div class=\'placeholder-box\'>Confusion matrix not yet generated.<br>Run: python -m src.deep_learning.evaluate_transformer</div>';" />
           </div>
-          <p class="matrix-caption">
-            Fast probabilistic baseline. Highly effective on typical keywords with zero false negatives on spam, but occasionally susceptible to false alarms on urgent ham messages.
-          </p>
         </div>
 
         <div class="matrix-box">
@@ -248,16 +241,9 @@
             <span class="matrix-tag dl">Deep Learning</span>
           </div>
           <div class="matrix-img-wrapper">
-            <img
-              src="/artifacts/distilbert_confusion.png"
-              alt="DistilBERT Confusion Matrix"
-              class="matrix-img"
-              onerror="this.parentElement.innerHTML='<div class=\'placeholder-box\'>Confusion matrix not yet generated.<br>Run: python -m src.deep_learning.evaluate_transformer</div>';"
-            />
+            <img src="/artifacts/distilbert_confusion.png" alt="DistilBERT Confusion Matrix" class="matrix-img"
+              onerror="this.parentElement.innerHTML='<div class=\'placeholder-box\'>Confusion matrix not yet generated.<br>Run: python -m src.deep_learning.evaluate_transformer</div>';" />
           </div>
-          <p class="matrix-caption">
-            Self-attention contextual model. Understands semantic subtleties, phishing disguised with friendly vocabulary, and code-mixed patterns with fewer false positives.
-          </p>
         </div>
       </div>
     </section>
@@ -333,4 +319,5 @@
     fetchReportData();
   </script>
 </body>
+
 </html>
