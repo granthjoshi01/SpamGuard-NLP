@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SpamGuard</title>
+    <title>SpamGuard - Multilingual SMS Shield</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,24 +13,66 @@
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
+    <!-- Top Navigation Header -->
+    <header class="site-header">
+      <div class="nav-container">
+        <a href="/" class="brand-link">
+          <span class="brand-icon">🛡️</span>
+          <span class="brand-title">SpamGuard</span>
+        </a>
+        <nav class="nav-links">
+          <a href="/dashboard" class="nav-btn nav-btn-outline">
+            <span class="icon">📊</span> Model Comparison Dashboard
+          </a>
+        </nav>
+      </div>
+    </header>
+
     <div class="page-shell">
       <section class="hero-card">
         <div class="hero-copy">
           <p class="eyebrow">Multilingual SMS Shield</p>
           <h1>SpamGuard</h1>
           <p class="intro">
-            Check suspicious SMS content in seconds. Select the message
-            language, paste the SMS manually, and let SpamGuard estimate whether
-            it is spam or ham using an NLP pipeline.
+            Check suspicious SMS messages in real time. Choose between our fast
+            <strong>Multinomial Naive Bayes</strong> baseline or the fine-tuned
+            <strong>DistilBERT Deep Learning Transformer</strong> for advanced contextual understanding.
           </p>
           <ul class="highlights">
-            <li>Flags risky SMS patterns before you click or reply</li>
-            <li>Supports 5 launch languages</li>
-            <li>Shows confidence and quick safety advice</li>
+            <li>Flags risky SMS patterns & phishing before you click</li>
+            <li>Supports 5 launch languages with automatic translation</li>
+            <li>Dual-engine architecture: Fast Baseline & Transformer DL</li>
           </ul>
         </div>
 
         <form id="spam-form" class="checker-panel">
+          <!-- Model Selection -->
+          <div class="field">
+            <span>Detection Engine / Model</span>
+            <div class="model-selector-group" role="radiogroup" aria-label="Detection Engine">
+              <label class="model-option selected" id="opt-nb">
+                <input type="radio" name="model" value="naive_bayes" checked />
+                <div class="model-info">
+                  <div class="model-title">
+                    <span>Naive Bayes</span>
+                  </div>
+                  <p class="model-desc">TF-IDF ngram baseline. Ultra-low latency & small footprint.</p>
+                </div>
+              </label>
+
+              <label class="model-option" id="opt-distilbert">
+                <input type="radio" name="model" value="distilbert" />
+                <div class="model-info">
+                  <div class="model-title">
+                    <span>DistilBERT</span>
+                  </div>
+                  <p class="model-desc">Transformer sequence classifier. High semantic & context accuracy.</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Language Selection -->
           <label class="field">
             <span>SMS Language</span>
             <div class="custom-select" id="language-select">
@@ -63,12 +105,13 @@
             </div>
           </label>
 
+          <!-- SMS Textarea -->
           <label class="field">
             <span>SMS Message</span>
             <textarea
               id="message"
               name="message"
-              rows="7"
+              rows="6"
               placeholder="Example: Congratulations! You have won a free gift card. Click the link now to claim your prize."
               required
             ></textarea>
@@ -76,12 +119,13 @@
 
           <button type="submit" id="submit-button">Check Message</button>
           <p class="helper-text" id="form-status">
-            Enter a message and choose the original SMS language.
+            Choose detection model, language, and paste your SMS.
           </p>
         </form>
       </section>
     </div>
 
+    <!-- Result Modal -->
     <div class="modal hidden" id="result-modal" aria-hidden="true">
       <div class="modal-backdrop" data-close="true"></div>
       <div
@@ -104,6 +148,10 @@
           <div>
             <dt>Selected Language</dt>
             <dd id="result-language">-</dd>
+          </div>
+          <div>
+            <dt>Model Used</dt>
+            <dd id="result-model">-</dd>
           </div>
         </dl>
         <div class="result-panel">

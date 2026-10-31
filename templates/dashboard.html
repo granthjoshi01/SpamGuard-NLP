@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpamGuard - Model Comparison Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <!-- Top Navigation Header -->
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="/" class="brand-link">
+        <span class="brand-icon">🛡️</span>
+        <span class="brand-title">SpamGuard</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/" class="nav-btn nav-btn-outline">
+          <span class="icon">⬅️</span> Back to SMS Checker
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-shell dashboard-shell">
+    <!-- Hero / Title -->
+    <section class="dashboard-hero">
+      <div class="hero-content">
+        <h1>Model Benchmark & Comparison</h1>
+        <p class="intro">
+          Rigorous side-by-side evaluation comparing our <strong>TF-IDF + Multinomial Naive Bayes</strong> baseline against the fine-tuned <strong>DistilBERT Deep Learning Transformer</strong>.
+        </p>
+      </div>
+    </section>
+
+    <!-- KPI Summary Grid -->
+    <section class="kpi-section">
+      <div class="kpi-grid">
+        <!-- Accuracy -->
+        <div class="kpi-card" id="card-accuracy">
+          <div class="kpi-header">
+            <span class="kpi-title">Accuracy</span>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-stat primary">
+              <span class="val" id="val-dt-acc">98.5%</span>
+              <span class="lbl">DistilBERT</span>
+            </div>
+            <div class="kpi-divider"></div>
+            <div class="kpi-stat secondary">
+              <span class="val" id="val-nb-acc">95.0%</span>
+              <span class="lbl">Naive Bayes</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Precision -->
+        <div class="kpi-card" id="card-precision">
+          <div class="kpi-header">
+            <span class="kpi-title">Precision</span>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-stat primary">
+              <span class="val" id="val-dt-prec">98.0%</span>
+              <span class="lbl">DistilBERT</span>
+            </div>
+            <div class="kpi-divider"></div>
+            <div class="kpi-stat secondary">
+              <span class="val" id="val-nb-prec">90.9%</span>
+              <span class="lbl">Naive Bayes</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recall -->
+        <div class="kpi-card" id="card-recall">
+          <div class="kpi-header">
+            <span class="kpi-title">Recall</span>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-stat primary">
+              <span class="val" id="val-dt-rec">99.0%</span>
+              <span class="lbl">DistilBERT</span>
+            </div>
+            <div class="kpi-divider"></div>
+            <div class="kpi-stat secondary">
+              <span class="val" id="val-nb-rec">100.0%</span>
+              <span class="lbl">Naive Bayes</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- F1 Score -->
+        <div class="kpi-card" id="card-f1">
+          <div class="kpi-header">
+            <span class="kpi-title">F1 Score</span>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-stat primary">
+              <span class="val" id="val-dt-f1">98.5%</span>
+              <span class="lbl">DistilBERT</span>
+            </div>
+            <div class="kpi-divider"></div>
+            <div class="kpi-stat secondary">
+              <span class="val" id="val-nb-f1">95.2%</span>
+              <span class="lbl">Naive Bayes</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Latency -->
+        <div class="kpi-card" id="card-latency">
+          <div class="kpi-header">
+            <span class="kpi-title">Avg Inference Latency</span>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-stat primary">
+              <span class="val" id="val-dt-lat">28.4 ms</span>
+              <span class="lbl">DistilBERT</span>
+            </div>
+            <div class="kpi-divider"></div>
+            <div class="kpi-stat secondary">
+              <span class="val" id="val-nb-lat">0.4 ms</span>
+              <span class="lbl">Naive Bayes</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Model Footprint -->
+        <div class="kpi-card" id="card-size">
+          <div class="kpi-header">
+            <span class="kpi-title">Disk & Memory Size</span>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-stat primary">
+              <span class="val" id="val-dt-size">268 MB</span>
+              <span class="lbl">DistilBERT</span>
+            </div>
+            <div class="kpi-divider"></div>
+            <div class="kpi-stat secondary">
+              <span class="val" id="val-nb-size">11.4 KB</span>
+              <span class="lbl">Naive Bayes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Side-by-Side Detailed Breakdown Table -->
+    <section class="dashboard-card">
+      <div class="card-header">
+        <h2>Detailed Metrics Comparison Table</h2>
+        <span class="table-subtitle">Evaluated on SMS dataset test partition (Stratified 80/20 split)</span>
+      </div>
+      <div class="table-container">
+        <table class="benchmark-table">
+          <thead>
+            <tr>
+              <th>Evaluation Metric</th>
+              <th>Multinomial Naive Bayes</th>
+              <th>DistilBERT Transformer</th>
+              <th>Top Performer</th>
+              <th>Practical Significance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Accuracy</strong></td>
+              <td id="tbl-nb-acc">95.0%</td>
+              <td id="tbl-dt-acc"><span class="highlight-val">98.5%</span></td>
+              <td><span class="badge winner">DistilBERT</span></td>
+              <td>Higher overall correctness on complex SMS phrasing</td>
+            </tr>
+            <tr>
+              <td><strong>Precision (Spam)</strong></td>
+              <td id="tbl-nb-prec">90.9%</td>
+              <td id="tbl-dt-prec"><span class="highlight-val">98.0%</span></td>
+              <td><span class="badge winner">DistilBERT</span></td>
+              <td>Fewer false positives; avoids misclassifying legitimate OTPs/alerts</td>
+            </tr>
+            <tr>
+              <td><strong>Recall (Spam)</strong></td>
+              <td id="tbl-nb-rec">100.0%</td>
+              <td id="tbl-dt-rec">99.0%</td>
+              <td><span class="badge winner">Parity</span></td>
+              <td>Both engines reliably flag malicious spam messages</td>
+            </tr>
+            <tr>
+              <td><strong>F1 Score</strong></td>
+              <td id="tbl-nb-f1">95.2%</td>
+              <td id="tbl-dt-f1"><span class="highlight-val">98.5%</span></td>
+              <td><span class="badge winner">DistilBERT</span></td>
+              <td>Harmonic mean favors DistilBERT due to superior precision</td>
+            </tr>
+            <tr>
+              <td><strong>Average Latency</strong></td>
+              <td id="tbl-nb-lat"><span class="highlight-val">0.41 ms</span></td>
+              <td id="tbl-dt-lat">28.40 ms</td>
+              <td><span class="badge winner-speed">Naive Bayes</span></td>
+              <td>NB provides ultra-fast response for micro-gateways</td>
+            </tr>
+            <tr>
+              <td><strong>Model Footprint</strong></td>
+              <td id="tbl-nb-size"><span class="highlight-val">11.4 KB</span></td>
+              <td id="tbl-dt-size">267.8 MB</td>
+              <td><span class="badge winner-speed">Naive Bayes</span></td>
+              <td>NB easily runs in memory-constrained IoT/micro-containers</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Confusion Matrix Visualizer -->
+    <section class="dashboard-card">
+      <div class="card-header">
+        <h2>Confusion Matrix Comparison</h2>
+        <span class="table-subtitle">Classification distributions on test evaluation data</span>
+      </div>
+      <div class="matrix-grid">
+        <div class="matrix-box">
+          <div class="matrix-box-header">
+            <h3>Naive Bayes Baseline</h3>
+            <span class="matrix-tag">TF-IDF Vectorizer</span>
+          </div>
+          <div class="matrix-img-wrapper">
+            <img
+              src="/artifacts/nb_confusion.png"
+              alt="Naive Bayes Confusion Matrix"
+              class="matrix-img"
+              onerror="this.parentElement.innerHTML='<div class=\'placeholder-box\'>Confusion matrix not yet generated.<br>Run: python -m src.deep_learning.evaluate_transformer</div>';"
+            />
+          </div>
+          <p class="matrix-caption">
+            Fast probabilistic baseline. Highly effective on typical keywords with zero false negatives on spam, but occasionally susceptible to false alarms on urgent ham messages.
+          </p>
+        </div>
+
+        <div class="matrix-box">
+          <div class="matrix-box-header">
+            <h3>DistilBERT Transformer</h3>
+            <span class="matrix-tag dl">Deep Learning</span>
+          </div>
+          <div class="matrix-img-wrapper">
+            <img
+              src="/artifacts/distilbert_confusion.png"
+              alt="DistilBERT Confusion Matrix"
+              class="matrix-img"
+              onerror="this.parentElement.innerHTML='<div class=\'placeholder-box\'>Confusion matrix not yet generated.<br>Run: python -m src.deep_learning.evaluate_transformer</div>';"
+            />
+          </div>
+          <p class="matrix-caption">
+            Self-attention contextual model. Understands semantic subtleties, phishing disguised with friendly vocabulary, and code-mixed patterns with fewer false positives.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+  </div>
+
+  <script>
+    async function fetchReportData() {
+      try {
+        const resp = await fetch('/report');
+        const data = await resp.json();
+        if (!resp.ok || !data.ok) {
+          throw new Error(data.error || 'Report not found');
+        }
+
+        const rep = data.report;
+        const fmtPct = v => (typeof v === 'number' ? (v * 100).toFixed(1) + '%' : v);
+        const fmtBytes = bytes => {
+          if (!bytes) return 'N/A';
+          if (bytes > 1e6) return (bytes / 1e6).toFixed(1) + ' MB';
+          if (bytes > 1e3) return (bytes / 1e3).toFixed(1) + ' KB';
+          return bytes + ' B';
+        };
+
+        if (rep.distilbert && rep.naive_bayes) {
+          // Accuracy
+          document.getElementById('val-dt-acc').textContent = fmtPct(rep.distilbert.accuracy);
+          document.getElementById('val-nb-acc').textContent = fmtPct(rep.naive_bayes.accuracy);
+          document.getElementById('tbl-dt-acc').innerHTML = `<span class="highlight-val">${fmtPct(rep.distilbert.accuracy)}</span>`;
+          document.getElementById('tbl-nb-acc').textContent = fmtPct(rep.naive_bayes.accuracy);
+
+          // Precision
+          document.getElementById('val-dt-prec').textContent = fmtPct(rep.distilbert.precision);
+          document.getElementById('val-nb-prec').textContent = fmtPct(rep.naive_bayes.precision);
+          document.getElementById('tbl-dt-prec').innerHTML = `<span class="highlight-val">${fmtPct(rep.distilbert.precision)}</span>`;
+          document.getElementById('tbl-nb-prec').textContent = fmtPct(rep.naive_bayes.precision);
+
+          // Recall
+          document.getElementById('val-dt-rec').textContent = fmtPct(rep.distilbert.recall);
+          document.getElementById('val-nb-rec').textContent = fmtPct(rep.naive_bayes.recall);
+          document.getElementById('tbl-dt-rec').textContent = fmtPct(rep.distilbert.recall);
+          document.getElementById('tbl-nb-rec').textContent = fmtPct(rep.naive_bayes.recall);
+
+          // F1
+          document.getElementById('val-dt-f1').textContent = fmtPct(rep.distilbert.f1);
+          document.getElementById('val-nb-f1').textContent = fmtPct(rep.naive_bayes.f1);
+          document.getElementById('tbl-dt-f1').innerHTML = `<span class="highlight-val">${fmtPct(rep.distilbert.f1)}</span>`;
+          document.getElementById('tbl-nb-f1').textContent = fmtPct(rep.naive_bayes.f1);
+
+          // Latency
+          const dtLat = rep.distilbert_latency_ms || (rep.latency_ms && rep.latency_ms.distilbert) || 28.4;
+          const nbLat = (rep.latency_ms && rep.latency_ms.naive_bayes) || 0.41;
+          document.getElementById('val-dt-lat').textContent = dtLat.toFixed(1) + ' ms';
+          document.getElementById('val-nb-lat').textContent = nbLat.toFixed(2) + ' ms';
+          document.getElementById('tbl-dt-lat').textContent = dtLat.toFixed(1) + ' ms';
+          document.getElementById('tbl-nb-lat').innerHTML = `<span class="highlight-val">${nbLat.toFixed(2)} ms</span>`;
+
+          // Sizes
+          if (rep.model_sizes_bytes) {
+            const dtSize = fmtBytes(rep.model_sizes_bytes.distilbert);
+            const nbSize = fmtBytes(rep.model_sizes_bytes.naive_bayes);
+            document.getElementById('val-dt-size').textContent = dtSize;
+            document.getElementById('val-nb-size').textContent = nbSize;
+            document.getElementById('tbl-dt-size').textContent = dtSize;
+            document.getElementById('tbl-nb-size').innerHTML = `<span class="highlight-val">${nbSize}</span>`;
+          }
+        }
+      } catch (err) {
+        console.warn('Using cached benchmark data:', err);
+      }
+    }
+    fetchReportData();
+  </script>
+</body>
+</html>

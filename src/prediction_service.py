@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from src.config import SUPPORTED_LANGUAGE_CODES
 from src.model import load_model
@@ -26,33 +27,53 @@ class PredictionResult:
 
 
 class PredictionService:
-    def __init__(self, translator=None):
+    def __init__(self, translator=None, transformer=None):
         self.translator = translator or GoogleTranslationProvider()
         self._vectorizer = None
         self._model = None
+        self._transformer = transformer
         self._logger = setup_logger()
 
-    def _ensure_artifacts(self):
-        if self._vectorizer is not None and self._model is not None:
-            return
+    def _ensure_artifacts(self, model_name: str = "naive_bayes"):
+        """Load required artifacts based on the requested model.
 
-        self._logger.info("Ensuring model and vectorizer artifacts are loaded")
+        * For 'naive_bayes': TF-IDF vectorizer and MultinomialNB model.
+        * For 'distilbert': TransformerService instance.
+        """
+        if model_name == "naive_bayes":
+            if self._vectorizer is not None and self._model is not None:
+                return
+            self._logger.info("Ensuring Naive Bayes artifacts are loaded")
+            try:
+                self._vectorizer = load_vectorizer()
+                self._model = load_model()
+            except FileNotFoundError:
+                self._logger.warning("Artifacts not found. Training pipeline triggered.")
+                self._vectorizer, self._model = train_pipeline(save_artifacts=True)
+        elif model_name == "distilbert":
+            if self._transformer is not None:
+                return
+            self._logger.info("Ensuring DistilBERT transformer service is loaded")
+            from src.deep_learning.transformer_service import TransformerService
+            self._transformer = TransformerService()
+        else:
+            raise PredictionError(
+                f"Unsupported model '{model_name}'. Choose 'naive_bayes' or 'distilbert'.",
+                status_code=400,
+            )
 
-        try:
-            self._vectorizer = load_vectorizer()
-            self._model = load_model()
-        except FileNotFoundError:
-            self._logger.warning("Artifacts not found. Training pipeline triggered.")
-            self._vectorizer, self._model = train_pipeline(save_artifacts=False)
-
-    def predict_message(self, message: str, language: str) -> PredictionResult:
+    def predict_message(
+        self, message: str, language: str, model_name: str = "naive_bayes"
+    ) -> PredictionResult:
         if not isinstance(message, str) or not message.strip():
             raise PredictionError("Please enter an SMS message before checking it.")
 
         if language not in SUPPORTED_LANGUAGE_CODES:
             raise PredictionError("Please choose a supported SMS language.")
 
-        self._logger.info(f"Prediction request received | language={language}")
+        self._logger.info(
+            f"Prediction request received | language={language} | model={model_name}"
+        )
 
         try:
             translated_text = self.translator.translate(message.strip(), language)
@@ -67,16 +88,28 @@ class PredictionService:
                 "That message could not be processed. Please try a longer SMS."
             )
 
-        self._ensure_artifacts()
+        self._ensure_artifacts(model_name=model_name)
 
-        features = self._vectorizer.transform([normalized_text])
-        predicted_class = int(self._model.predict(features)[0])
-        probabilities = self._model.predict_proba(features)[0]
-        confidence = float(max(probabilities))
+        if model_name == "distilbert":
+            try:
+                label, confidence = self._transformer.predict(normalized_text)
+            except (FileNotFoundError, RuntimeError) as exc:
+                self._logger.error(f"DistilBERT inference error: {exc}")
+                raise PredictionError(str(exc), status_code=503) from exc
 
-        self._logger.info(f"Model prediction complete | class={predicted_class} | confidence={confidence:.4f}")
+            self._logger.info(
+                f"DistilBERT prediction complete | label={label} | confidence={confidence:.4f}"
+            )
+        else:
+            features = self._vectorizer.transform([normalized_text])
+            predicted_class = int(self._model.predict(features)[0])
+            probabilities = self._model.predict_proba(features)[0]
+            confidence = float(max(probabilities))
+            label = "Spam" if predicted_class == 1 else "Ham"
+            self._logger.info(
+                f"Naive Bayes prediction complete | class={predicted_class} | confidence={confidence:.4f}"
+            )
 
-        label = "Spam" if predicted_class == 1 else "Ham"
         tips = self._build_tips(label)
 
         return PredictionResult(

@@ -3,3 +3,8 @@ logs/
 __pycache__/
 *.pyc
 .env
+artifacts/transformer/
+artifacts/*.pkl
+__pycache__/
+.pytest_cache/
+logs/

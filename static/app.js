@@ -12,12 +12,24 @@ const languageOptions = Array.from(document.querySelectorAll(".select-option"));
 const resultPill = document.getElementById("result-pill");
 const resultConfidence = document.getElementById("result-confidence");
 const resultLanguage = document.getElementById("result-language");
+const resultModel = document.getElementById("result-model");
 const resultTips = document.getElementById("result-tips");
 const resultTranslation = document.getElementById("result-translation");
+const modelOptions = document.querySelectorAll(".model-option");
 
 const languageMap = Object.fromEntries(
   (window.spamGuardLanguages || []).map((item) => [item.code, item.label])
 );
+
+// Model selection visual state sync
+modelOptions.forEach((option) => {
+  const radio = option.querySelector('input[type="radio"]');
+  option.addEventListener("click", () => {
+    modelOptions.forEach((opt) => opt.classList.remove("selected"));
+    option.classList.add("selected");
+    radio.checked = true;
+  });
+});
 
 function openModal() {
   modal.classList.remove("hidden");
@@ -65,6 +77,12 @@ function updateModal(result) {
   resultPill.className = `result-pill ${toneClass}`;
   resultConfidence.textContent = `${result.confidence}%`;
   resultLanguage.textContent = languageMap[result.language] || result.language;
+  
+  if (resultModel) {
+    resultModel.textContent =
+      result.model === "distilbert" ? "DistilBERT" : "Naive Bayes";
+  }
+  
   resultTips.textContent = result.tips;
   resultTranslation.textContent = result.translated_text;
 }
@@ -72,13 +90,17 @@ function updateModal(result) {
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
+  const selectedModelInput = document.querySelector('input[name="model"]:checked');
+  const selectedModel = selectedModelInput ? selectedModelInput.value : "naive_bayes";
+
   const payload = {
     language: languageInput.value,
     message: document.getElementById("message").value,
+    model: selectedModel,
   };
 
   submitButton.disabled = true;
-  setStatus("Checking your SMS with SpamGuard...", "");
+  setStatus(`Checking SMS with ${selectedModel === "distilbert" ? "DistilBERT" : "Naive Bayes"}...`, "");
 
   try {
     const response = await fetch("/predict", {

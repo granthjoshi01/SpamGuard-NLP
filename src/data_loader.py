@@ -2,7 +2,7 @@ import pandas as pd
 
 
 def load_data(path="data/spam.csv"):
-    df = pd.read_csv(path)
+    df = pd.read_csv(path , encoding="latin-1")
     expected_columns = {"label", "message"}
     if expected_columns.issubset(df.columns):
         return df[["label", "message"]].copy()
